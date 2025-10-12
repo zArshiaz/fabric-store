@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+
+
+
+@font-face {
+  font-family: 'Dorna Regular';
+  src: url('/fonts/dorna/Dorna Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Dorna Light';
+  src: url('/fonts/dorna/Dorna Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Dorna Bold';
+  src: url('/fonts/dorna/Dorna Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Kamva';
+  src: url('/fonts/kamva/kamva.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'TitrZebr';
+  src: url('/fonts/titr-Zebr/TitrZebr.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Hamishe';
+  src: url('/fonts/hamishe/Digi Hamishe Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Hamishe Bold';
+  src: url('/fonts/hamishe/Digi Hamishe Bold.ttf') format('truetype');
+}
+
+
+
+@theme{
+
+
+  --font-dorna: 'Dorna Regular';
+  --font-dorna-bold: 'Dorna Bold';
+  --font-hamishe: 'Hamishe';
+  --font-hamishe-light: 'Hamishe Light';
+  --font-hamishe-bold: 'Hamishe Bold';
+  --font-kamva: 'Kamva';
+  --font-titr-zebr: 'TitrZebr';
+
+
+  --color-my_blue:#00ACC1;
+
+
+  --shadow-myShadow: 0 0 30px 5px gray;
+}
+
+.container{
+@apply mx-auto  xl:max-w-screen-xl px-3 sm:px-0 ;
+
+}
+body{
+  @apply bg-rose-50;
+  background-size:100%;
+
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
