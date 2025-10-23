@@ -1,20 +1,22 @@
 'use client'
 import React, {useEffect, useState} from 'react'
 import AddToCartBtn from "@/Components/AddToCartBtn/AddToCartBtn";
-import {IProduct, IProductCart} from "@/types/product";
+import {ICartItem, IProduct, IProductCart} from "@/types/product";
 import {useCartContext} from "@/Contexts/CartContext";
 import {MdOutlineDeleteForever} from "react-icons/md";
 import Link from "next/link";
 import PrintStarts from "@/Utilities/PrintStarts";
 import {FaTrashAlt} from "react-icons/fa";
 
-function CartItem({cartItem}: { cartItem: IProductCart }) {
+const CartItem = React.memo(function ({cartItem}: { cartItem: ICartItem}) {
     const {changeMeter, deleteItem} = useCartContext()
     const [product, setProduct] = useState<IProduct>();
     const [count, setCount] = useState<number>(cartItem.meters);
 
     useEffect(() => {
-        fetch(`http://localhost:4000/api/product/${cartItem._id}`).then(res => res.json()).then(data => setProduct(data));
+        fetch(`http://localhost:4000/api/product/${cartItem._id}`,{cache:'force-cache'}).then(res => res.json()).then(data => setProduct(data));
+        console.log('fetch cart item')
+
     }, [cartItem]);
 
     useEffect(() => {
@@ -81,7 +83,7 @@ function CartItem({cartItem}: { cartItem: IProductCart }) {
             </div>
         </div>
     )
-}
+})
 
 export default CartItem
 

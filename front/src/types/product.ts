@@ -58,8 +58,48 @@ export interface IProduct {
     createdAt?: Date;
     updatedAt?: Date;
 }
+export interface ICartItem {
+    key: string;
+    _id: string;
+    name: string;
+    slug: string;
+    shortDescription?: string;
+    description?: string;
+
+    category?: string;
+    brand?: string;
+    tags?: string[];
+    sku?: string;
+
+    colorName?: string;
+    pattern?: string;
+    composition?: IComposition[];
+    widthCm?: number;
+    finish?: string[];
+
+    pricePerMeter: number;
+    pricePerMeterWithDiscount?: number;
+    stockMeters?: number;
+    minOrderMeters?: number;
+
+    images: IImage[];
+    status: "draft" | "active" | "archived";
+    publishedAt: Date;
+
+    seo?: ISeo;
+
+    ratingAvg?: number;
+    ratingCount: number;
+
+    discount?: boolean;
+
+    createdAt?: Date;
+    updatedAt?: Date;
+    meters: number;
+}
 
 export interface IProductCart{
+    key: string;
     _id: string;
     meters: number;
 }

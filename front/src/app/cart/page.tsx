@@ -7,9 +7,10 @@ import CartItem from "@/Components/CartItem/CartItem";
 import {nanoid} from "nanoid";
 import CartPriceSection from "@/Components/CartPriceSection/CartPriceSection";
 import ScrollToBottomButton from "@/Components/ScrollToBottomButton/ScrollToBottomButton";
+import CartListItems from "@/Components/CartListItems/CartListItems";
 
 export default function CartPage() {
-    const {cartItems, cartLength} = useCartContext()
+    const {cartLength} = useCartContext()
 
     return (
         <div>
@@ -26,7 +27,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {cartItems.length === 0 ? (
+                {cartLength() === 0 ? (
                     <div className={'flex justify-center'}>
                         <Alert className={' p-8 flex flex-col  items-center '} type={'warning'}>
                             <div> سبد خرید شما خالی است .</div>
@@ -35,12 +36,9 @@ export default function CartPage() {
                     </div>
                 ) : (
                     <div className={'grid grid-cols-1 lg:grid-cols-8 gap-3'}>
-                        <div className={'lg:col-span-5 space-y-2'}>
-                            {
-                                cartItems.map((item, i) =>
-                                    <CartItem key={nanoid()} cartItem={item}/>
-                                )
-                            }
+                        <div className={'lg:col-span-5'}>
+
+                            <CartListItems/>
                         </div>
                         <div className={'lg:col-span-3'}>
                             <div

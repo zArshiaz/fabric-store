@@ -1,6 +1,7 @@
 'use client'
 import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState} from "react";
 import {IProductCart} from "@/types/product";
+import {nanoid} from "nanoid";
 
 interface ICartContext {
     addToCart: (productCart: IProductCart) => void;
@@ -34,11 +35,11 @@ function CartProvider({children}: { children: ReactNode }) {
 
 
     const addToCart = useCallback((p: IProductCart) => {
-        setCartItems((prev) => [...prev, p])
+        setCartItems((prev) => [...prev, {...p,key:nanoid()}])
     }, [])
     const deleteItem = useCallback((p: IProductCart) => {
         setCartItems(prev => {
-            const i = prev.findIndex(item => item._id === p._id && item.meters === p.meters);
+            const i = prev.findIndex(item => item.key===p.key);
             if (i === -1) return prev;
             return [...prev.slice(0, i), ...prev.slice(i + 1)];
         });
@@ -46,7 +47,7 @@ function CartProvider({children}: { children: ReactNode }) {
 
     const changeMeter = useCallback((p: IProductCart,value:number) => {
         setCartItems(prev => {
-            const i = prev.findIndex(item => item._id === p._id && item.meters === p.meters);
+            const i = prev.findIndex(item => item.key===p.key);
             if (i === -1) return prev;
             const prevValue=prev[i].meters;
             if (prevValue === value) return prev;
