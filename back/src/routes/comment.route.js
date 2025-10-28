@@ -12,9 +12,8 @@ router.post("/:id/like",getUser(process.env), async (req, res) => {
     const comment = await Comment.findById(req.params.id);
     if (!comment) return res.status(404).json({ error: "Comment not found" });
 
-    const userId = req.user.id; // از توکن گرفته می‌شود
+    const userId = req.user.id;
 
-    // اگر قبلاً لایک کرده بود → آن‌لایک کن
     if (comment.likes.includes(userId)) {
       comment.likes.pull(userId);
     } else {

@@ -3,53 +3,40 @@ import Link from "next/link";
 import * as React from "react";
 import {BsCart4} from "react-icons/bs";
 import {HiMiniArrowLeftEndOnRectangle} from "react-icons/hi2";
-import {usePathname} from "next/navigation";
+import {usePathname, useSearchParams} from "next/navigation";
 import {IoIosArrowDown, IoIosMenu} from "react-icons/io";
 import {HiOutlineMenu} from "react-icons/hi";
 import SidebarMenu from "@/Components/SidebarMenu/SidebarMenu";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SidebarCart from "@/Components/SidebarCart/SidebarCart";
 import {useAuthContext} from "@/Contexts/AuthContext";
 import {CgProfile} from "react-icons/cg";
 import {useCartContext} from "@/Contexts/CartContext";
 
 export type TNav = {
+    _id: string;
     title: string,
     href: string,
-    dropdownItems?: { title: string, href: string }[]
+    dropdownItems: { title: string, href: string ,_id: string }[]
 }
 
-export interface IHeaderProps {
-}
 
-export default function Header(props: IHeaderProps) {
+
+export default function Header() {
     const pathname = usePathname()
+    const searchParams = useSearchParams()
     const {isLoggedIn}=useAuthContext()
+    const {cartLength}=useCartContext()
+
+    const [navItems, setNavItems] = React.useState<TNav[]>([]);
     const [showSidebarMenu,setShowSidebarMenu] = useState(false)
 
-    const {cartLength}=useCartContext()
-    const navs: TNav[] = [
-        {
-            title: "صحفه اصلی",
-            href: "/",
-        },
-        {
-            title: "فروشگاه",
-            href: "/products",
-            dropdownItems: [
-                {
-                    title: 'همه محصولات',
-                    href: '/products',
-                }
-            ]
-        },
-        {
-            title: "درباره ما",
-            href: "/aboutus",
-        }
-    ];
+    useEffect(()=>{
+        fetch('http://localhost:4000/api/navbar',{cache:'force-cache'}).then(res=>res.json()).then(d=>setNavItems(d));
+    },[])
 
-    return (
+
+   return (
        <>
            <header>
                {/*for desktop*/}
@@ -61,21 +48,22 @@ export default function Header(props: IHeaderProps) {
                            <h1  className="font-titr-zebr text-2xl text-red-700">Fabric</h1>
                            {/* navbar */}
                            <nav className="flex items-center gap-2 sm:gap-4 md:gap-6">
-                               {navs.map((nav) => (
+                               {navItems.map((nav) => (
                                    <div className={'h-8 relative group'} key={nav.href}>
                                        <Link
-                                           className={`flex items-center leading-8 mb-1 hover:text-red-500 transition-all tracking-tighter ${nav.href === pathname ? 'text-red-600' : ''}`}
+                                           className={`flex items-center leading-8 mb-1 hover:text-red-500 transition-all tracking-tighter duration-300 ${nav.href === pathname ? 'text-red-600' : ''}`}
                                            href={nav.href}>
                                            {nav.title}
 
-                                           {nav.dropdownItems? (< IoIosArrowDown   className={'w-3 ms-1 group-hover:rotate-180 transition-all'} />):''}
+                                           {nav.dropdownItems.length > 0? (< IoIosArrowDown   className={'w-3 ms-1 group-hover:rotate-180 transition-all duration-300'} />):''}
                                        </Link>
                                        {/*dropdown-menu*/}
-                                       {nav.dropdownItems && (
-                                           <ul className={'absolute top-full right-0  text-sm text-zinc-600 bg-white  transition-all  min-w-40  p-3 space-y-2 border-t-4 border-red-600   backdrop-blur-xs rounded-lg shadow hidden  group-hover:inline-block '}>
+                                       { nav.dropdownItems.length > 0 && (
+                                           <ul className={'absolute top-full right-0  text-sm text-zinc-600 bg-white  min-w-40  p-3 space-y-2 border-t-4 border-red-600   backdrop-blur-xs rounded-lg shadow invisible opacity-0  group-hover:visible group-hover:opacity-100'}>
                                                {nav.dropdownItems.map((item) => (
-                                                   <li className={'hover:text-red-500 transition-all cursor-pointer'}
-                                                       key={item.href}>{item.title}</li>
+                                                  <li  key={item.href}>
+                                                      <Link href={item.href} className={`hover:text-red-500 transition-colors cursor-pointer`}>{item.title}</Link>
+                                                  </li>
                                                ))}
                                            </ul>
                                        )}
@@ -109,7 +97,7 @@ export default function Header(props: IHeaderProps) {
                        </div>
                    </div>
                </div>
-               <SidebarMenu show={showSidebarMenu} setShow={setShowSidebarMenu} sidebarList={navs}/>
+               <SidebarMenu show={showSidebarMenu} setShow={setShowSidebarMenu} sidebarList={navItems}/>
                <div className=" sm:hidden w-full h-16 px-5 bg-white flex justify-between items-center">
                    {/*menu icon*/}
                    <div onClick={()=>setShowSidebarMenu(p=>!p)}>

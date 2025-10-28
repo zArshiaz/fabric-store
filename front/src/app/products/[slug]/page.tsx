@@ -7,7 +7,7 @@ import ProductDetailsNavs from "@/Components/ProductDetailsNavs/ProductDetailsNa
 import {IComment} from "@/types/comment";
 
 type props = {
-    params: Promise<{ slug: string }>
+    params: Promise<{ slug: string }>,
 }
 
 async function ProductPage({params}: props) {

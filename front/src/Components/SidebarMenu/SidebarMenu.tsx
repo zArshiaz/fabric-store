@@ -57,15 +57,15 @@ export default function SidebarMenu({sidebarList, show, setShow}: {
                                     )}
                                 </div>
 
-                                {item.dropdownItems && (
+                                {item.dropdownItems.length>0 && (
                                     <div
                                         id={`dd-${idx}`}
                                         className={`header-dropdown flex flex-col mr-6 text-sm text-zinc-600 overflow-hidden transition-[max-height] duration-300 ease-in-out`}
-                                        style={{maxHeight: isOpen ? 600 : 0}} // مقدار بزرگِ امن
+                                        style={{maxHeight: isOpen ? 600 : 0}}
                                     >
-                                        {item.dropdownItems.map((sub: TNav, sIdx: number) => (
+                                        {item.dropdownItems.map((sub) => (
                                             <Link
-                                                key={sub.href ?? sIdx}
+                                                key={sub._id}
                                                 className={`py-2 ${pathname === sub.href ? 'text-red-600' : ''}`}
                                                 href={sub.href}
                                             >

@@ -49,10 +49,6 @@ function Login() {
                 await Swal.fire({text: 'خطا در  ورود', icon: 'error', timer: 2000});
             }
 
-
-
-
-
     }
 
 

@@ -5,7 +5,7 @@ import {Pagination,Navigation} from "swiper/modules";
 function ProductGallery({images,className}:{images:{url:string,alt:string}[],className?:string}) {
 
 
-  return (
+   return (
        <div className={`rounded-xl shadow-myShadow shadow-gray-200 overflow-hidden ${className}`}>
            <Swiper
                modules={[Navigation, Pagination]}

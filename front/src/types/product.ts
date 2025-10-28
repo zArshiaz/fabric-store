@@ -13,6 +13,16 @@ export interface ISeo {
     metaDescription?: string;
 }
 
+export interface Category {
+    _id: string
+    name: string
+    slug: string
+    status: string
+    createdAt: string
+    updatedAt: string
+    __v: number
+}
+
 export interface IProduct {
     _id: string;
     name: string;
@@ -21,7 +31,7 @@ export interface IProduct {
     description?: string;
 
     // دسته‌بندی/شناسه‌ها
-    category?: string;
+    category: Category[]
     brand?: string;
     tags?: string[];
     sku?: string;
@@ -66,7 +76,7 @@ export interface ICartItem {
     shortDescription?: string;
     description?: string;
 
-    category?: string;
+    category: Category[]
     brand?: string;
     tags?: string[];
     sku?: string;

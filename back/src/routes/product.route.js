@@ -5,28 +5,59 @@ import Product from "../models/Product.js";
 const router = Router();
 
 router.get("/all", async (req, res) => {
-  const p = await Product.find().sort({ createdAt: -1 });
-  res.status(200).json(p);
+    try {
+        let { category } = req.query;
+
+        if(typeof category === "string") {
+            category=[category]
+        }
+        if (!category) {
+            category = ["all"];
+        }
+
+
+        const products = await Product.aggregate([
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            !category.includes('all')  ? { $match: { "category.slug": { $in : category} } } : { $match: {} },
+            { $sort: { createdAt: -1 } }
+        ]);
+
+        res.status(200).json(products);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
+
+
 router.get("/:slug", async (req, res) => {
-  const { slug } = req.params;
+ try{
+     const { slug } = req.params;
+     let p = await Product.findOne({ slug });
+     console.log(1)
 
-  const p = await Product.findOne({ slug });
-  if (p) return res.status(200).json(p);
+     if(!p) p=await Product.findById(slug)
 
-  const p1 = await Product.findById(slug);
-  if(p1) return res.status(200).json(p1);
+    res.status(200).json(p);
 
-  res.status(400).json({error:'not definde'})
-
+ }
+ catch (error) {
+    res.status(400).json({ message: error.message });
+ }
 
 });
 
 router.post(
   "/",
   [
-    // پایه
     body("name")
       .trim()
       .isLength({ min: 2 })
@@ -35,7 +66,6 @@ router.post(
     body("shortDescription").trim().isString(),
     body("description").trim().isString(),
 
-    // قیمت و فروش
     body("pricePerMeter")
       .isFloat({ min: 0 })
       .withMessage("pricePerMeter باید عدد >=0 باشد"),
@@ -46,14 +76,16 @@ router.post(
     body("stockMeters").optional().isFloat({ min: 0 }),
     body("minOrderMeters").optional().isFloat({ min: 0 }),
 
-    // دسته‌بندی/شناسه‌ها
-    body("category").optional().isString(),
+      body("category")
+          .exists().withMessage("category is required")
+          .isArray({ min: 1 }).withMessage("category must be a non-empty array"),
+      body("category.*")
+          .isMongoId().withMessage("each category must be a valid MongoId"),
     body("brand").optional().isString(),
     body("tags").optional().isArray(),
     body("tags.*").optional().isString(),
     body("sku").optional().trim().isString(),
 
-    // ظاهر و ترکیب
     body("colorName").optional().isString(),
     body("pattern").optional().isString(),
 
@@ -67,7 +99,6 @@ router.post(
     body("finish").optional().isArray(),
     body("finish.*").optional().isString(),
 
-    // رسانه/نمایش
     body("images").optional().isArray(),
     body("images.*.url").optional().isString(),
     body("images.*.alt").optional().isString(),
@@ -75,12 +106,10 @@ router.post(
     body("status").optional().isIn(["draft", "active", "archived"]),
     body("publishedAt").optional().isISO8601().toDate(),
 
-    // SEO
     body("seo").optional().isObject(),
     body("seo.metaTitle").optional().isString().isLength({ max: 70 }),
     body("seo.metaDescription").optional().isString().isLength({ max: 160 }),
 
-    // تخفیف درصدی
     body("discount").optional().isBoolean(),
   ],
   async (req, res) => {
@@ -99,7 +128,6 @@ router.post(
 
       return res.status(201).json(product);
     } catch (err) {
-      // خطای یکتا (slug/sku)
       if (err && err.code === 11000) {
         const fields = Object.keys(err.keyPattern || err.keyValue || {});
         return res.status(409).json({ error: "Duplicate key", fields });
