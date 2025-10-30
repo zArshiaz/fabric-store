@@ -3,8 +3,7 @@ import "./globals.css";
 import React from "react";
 import AuthProvider from "@/Contexts/AuthContext";
 import CartProvider from "@/Contexts/CartContext";
-import dayjs from "dayjs";
-import relativeTime from 'dayjs/plugin/relativeTime';
+import Header from "@/Components/Header/Header";
 
 
 

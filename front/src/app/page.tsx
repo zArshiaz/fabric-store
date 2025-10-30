@@ -3,13 +3,16 @@ import React from 'react'
 import Hero from "@/Components/Hero/Hero";
 import LastProducts from "@/Components/LastProducts/LastProducts";
 import Footer from "@/Components/Footer/Footer";
+import whyDidYouRender from "@welldone-software/why-did-you-render";
+
+
 
 export default function Home() {
     return (
         <div>
             <Header></Header>
             <Hero></Hero>
-            <LastProducts></LastProducts>
+            {/*<LastProducts></LastProducts>*/}
             {/*<Footer></Footer>*/}
         </div>
     )

@@ -6,17 +6,21 @@ const router = Router();
 
 router.get("/all", async (req, res) => {
     try {
-        let { category } = req.query;
+        let { category, page = 1, limit = 10, search = "" } = req.query;
 
-        if(typeof category === "string") {
-            category=[category]
+        if (typeof category === "string") category = [category];
+        if (!category) category = ["all"];
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const matchStage = {};
+
+        if (search.trim() !== "") {
+            matchStage["name","shortDescription"] = { $regex: search, $options: "i" };
         }
-        if (!category) {
-            category = ["all"];
-        }
 
-
-        const products = await Product.aggregate([
+        const pipeline = [
             {
                 $lookup: {
                     from: "categories",
@@ -25,11 +29,49 @@ router.get("/all", async (req, res) => {
                     as: "category"
                 }
             },
-            !category.includes('all')  ? { $match: { "category.slug": { $in : category} } } : { $match: {} },
-            { $sort: { createdAt: -1 } }
-        ]);
+            { $unwind: "$category" }, // هر دسته جداگانه بررسی شود
+        ];
 
-        res.status(200).json(products);
+        // فیلتر بر اساس دسته‌بندی
+        if (!category.includes("all")) {
+            pipeline.push({
+                $match: { "category.slug": { $in: category } }
+            });
+        }
+
+        // فیلتر بر اساس سرچ (اگر وجود داشته باشد)
+        if (Object.keys(matchStage).length > 0) {
+            pipeline.push({ $match: matchStage });
+        }
+
+        pipeline.push(
+            { $sort: { createdAt: -1 } },
+            { $skip: (page - 1) * limit },
+            { $limit: limit }
+        );
+
+        // گرفتن محصولات
+        const products = await Product.aggregate(pipeline);
+        console.log(products);
+
+
+        // شمارش کل برای pagination
+        const countPipeline = pipeline
+            .filter(p => !("$skip" in p) && !("$limit" in p))
+            .concat([{ $count: "total" }]);
+
+        const totalCount = await Product.aggregate(countPipeline);
+        const total = totalCount[0]?.total || 0;
+
+        res.status(200).json({
+            products,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
@@ -38,11 +80,11 @@ router.get("/all", async (req, res) => {
 
 
 
+
 router.get("/:slug", async (req, res) => {
  try{
      const { slug } = req.params;
      let p = await Product.findOne({ slug });
-     console.log(1)
 
      if(!p) p=await Product.findById(slug)
 

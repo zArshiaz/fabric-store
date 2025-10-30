@@ -11,7 +11,7 @@ import { Navigation, Pagination } from "swiper/modules";
 function LastProducts() {
     const [products,setProducts] = React.useState<IProduct[]>([]);
     useEffect(()=>{
-           fetch("http://localhost:4000/api/product/all").then(res=>res.json()).then(d=>setProducts(d));
+           fetch("http://localhost:4000/api/product/all").then(res=>res.json()).then(d=>setProducts(d.products));
     },[])
 
 

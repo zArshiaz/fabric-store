@@ -1,5 +1,5 @@
 'use client'
-import React, {useRef, useState} from 'react'
+import React, {memo, useRef, useState} from 'react'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {IoClose} from 'react-icons/io5'
@@ -11,7 +11,7 @@ import {useAuthContext} from "@/Contexts/AuthContext";
 import {CgProfile} from "react-icons/cg";
 import {RxExit} from "react-icons/rx";
 
-export default function SidebarMenu({sidebarList, show, setShow}: {
+const SidebarMenu=memo(  function ({sidebarList, show, setShow}: {
     sidebarList: TNav[];
     show: boolean;
     setShow: any
@@ -112,4 +112,6 @@ export default function SidebarMenu({sidebarList, show, setShow}: {
                  className={`transition-all duration-300 ${show ? 'bottom-0' : '-bottom-full'} fixed w-screen h-full bg-black/40 z-20`}/>
         </>
     )
-}
+})
+
+export default SidebarMenu;

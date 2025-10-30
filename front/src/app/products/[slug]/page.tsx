@@ -17,7 +17,7 @@ async function ProductPage({params}: props) {
 
     if (product) return (
         <>
-            <Header></Header>
+
             <div className="container">
                 <div className={'mt-2 sm:mt-20 grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6 mb-6  relative'}>
                     <div >
