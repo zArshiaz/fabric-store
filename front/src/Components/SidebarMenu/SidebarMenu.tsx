@@ -66,8 +66,9 @@ const SidebarMenu=memo(  function ({sidebarList, show, setShow}: {
                                         {item.dropdownItems.map((sub) => (
                                             <Link
                                                 key={sub._id}
-                                                className={`py-2 ${pathname === sub.href ? 'text-red-600' : ''}`}
+                                                className={`pt-1 ${pathname === sub.href ? 'text-red-600' : ''}`}
                                                 href={sub.href}
+                                                onClick={()=>setShow(false)}
                                             >
                                                 {sub.title}
                                             </Link>
@@ -81,7 +82,7 @@ const SidebarMenu=memo(  function ({sidebarList, show, setShow}: {
 
                 {/* footer */}
                 <div className="mx-1 px-3 py-4 border-t border-gray-300 text-base space-y-4">
-                    <Link className="flex items-center gap-2 text-red-600 cursor-pointer " href="/">
+                    <Link className="flex items-center gap-2 text-red-600 cursor-pointer " href="/order/cart">
                         <BsCart4 className="text-xl"/>
                         <span>سبد خرید</span>
                     </Link>

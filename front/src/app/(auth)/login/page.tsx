@@ -6,7 +6,7 @@ import {FiEye, FiEyeOff} from "react-icons/fi";
 import {useForm} from "react-hook-form";
 import {LuLoaderCircle} from "react-icons/lu";
 import {useAuthContext} from "@/Contexts/AuthContext";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import Swal from "sweetalert2";
 
 
@@ -21,17 +21,21 @@ function Login() {
     })
     const {login} = useAuthContext()
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectParam=searchParams.get("redirect");
+    const redirect = redirectParam && redirectParam.startsWith("/") ? redirectParam : "/";
     const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
     const submit = async (d: TFormValues) => {
-            setLoading(true);
+        setLoading(true);
+        try {
             const res = await fetch('http://localhost:4000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials:'include',
+                credentials: 'include',
                 body: JSON.stringify({
                     email: d.email,
                     password: d.password
@@ -41,14 +45,19 @@ function Login() {
                 const data = await res.json();
                 setLoading(false);
                 login(data.user);
-                await Swal.fire({text: 'ورود  با موفقیت انجام شد'});
+                await Swal.fire({
+                    text: 'ورود  با موفقیت انجام شد',
+                });
                 reset();
-                router.back();
+                router.replace(redirect);
             }else {
-                setLoading(false);
-                await Swal.fire({text: 'خطا در  ورود', icon: 'error', timer: 2000});
+                throw new Error('خطا')
             }
 
+        } catch (e) {
+            setLoading(false);
+            await Swal.fire({text: 'خطا در  ورود', icon: 'error', timer: 2000,});
+        }
     }
 
 

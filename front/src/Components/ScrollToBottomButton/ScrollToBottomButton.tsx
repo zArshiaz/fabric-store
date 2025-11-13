@@ -5,7 +5,6 @@ import {FaArrowDown} from "react-icons/fa";
 export default function ScrollToBottomButton({className}: {className?: string}) {
     const [showButton, setShowButton] = useState(true);
 
-    // بررسی اینکه کاربر چقدر پایین اومده
     const handleScroll = () => {
         const scrollTop = window.scrollY;
         const windowHeight = window.innerHeight;
@@ -34,7 +33,7 @@ export default function ScrollToBottomButton({className}: {className?: string}) 
     return (
         <>
             {showButton && (
-                <button className={`${className} fixed bottom-5 right-5 bg-red-800 rounded-full p-3 text-white`} onClick={scrollToBottom}>
+                <button className={`${className} z-50 cursor-pointer fixed bottom-3 right-3 bg-red-800 rounded-full p-3 text-white`} onClick={scrollToBottom}>
                     <FaArrowDown/>
                 </button>
             )}

@@ -12,7 +12,7 @@ export default function Home() {
         <div>
             <Header></Header>
             <Hero></Hero>
-            {/*<LastProducts></LastProducts>*/}
+            <LastProducts></LastProducts>
             {/*<Footer></Footer>*/}
         </div>
     )

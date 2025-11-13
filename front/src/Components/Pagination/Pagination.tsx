@@ -6,15 +6,12 @@ import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
 
 interface Props {
     pagination: IPagination;
-    queryString: string[];
+    queryString: URLSearchParams;
     siblingCount?: number;
 }
 
 const DOTS = "...";
 
-function FaArrowLeaft(props: { className: string }) {
-    return null;
-}
 
 export default function Pagination({pagination, queryString, siblingCount = 1}: Props) {
     const totalPages = pagination?.totalPages || 1;
@@ -55,13 +52,8 @@ export default function Pagination({pagination, queryString, siblingCount = 1}: 
     const paginationRange = getPaginationRange();
 
     const buildQuery = (page: number) => {
-        const params = new URLSearchParams();
-        queryString.forEach((q) => {
-            const [key, value] = q.split("=");
-            if (key !== "page") params.set(key, value);
-        });
-        params.set("page", page.toString());
-        return params.toString();
+        queryString.set("page", page.toString());
+        return queryString.toString();
     };
 
     return (

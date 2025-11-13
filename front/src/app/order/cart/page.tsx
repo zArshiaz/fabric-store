@@ -8,24 +8,28 @@ import {nanoid} from "nanoid";
 import CartPriceSection from "@/Components/CartPriceSection/CartPriceSection";
 import ScrollToBottomButton from "@/Components/ScrollToBottomButton/ScrollToBottomButton";
 import CartListItems from "@/Components/CartListItems/CartListItems";
+import ShoppingProgressBar from "@/Components/ShoppingProgressBar/ShoppingProgressBar";
+import {useRouter} from "next/navigation";
+import {useAuthContext} from "@/Contexts/AuthContext";
+import TitlePage from "@/Components/TitlePage/TitlePage";
 
 export default function CartPage() {
     const {cartLength} = useCartContext()
+    const {isLoggedIn} = useAuthContext();
+    const router = useRouter()
+
+    const changeRouteHandler=()=>{
+        if(isLoggedIn){
+            router.push("/order/address");
+        }else {
+            router.push("/login?redirect=order/cart");
+        }
+    }
 
     return (
         <div>
-            <Header/>
-            <div className="container mt-2 sm:mt-20 pb-3 md:pb-5">
-                <div
-                    className="bg-white rounded-xl shadow p-3 mb-3">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div className="">
-                                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
-                                    سبد خرید شما
-                                </h1>
-                        </div>
-                    </div>
-                </div>
+            <div className="container pb-3 md:pb-5">
+                <TitlePage title={'سبد خرید'}/>
 
                 {cartLength() === 0 ? (
                     <div className={'flex justify-center'}>
@@ -45,7 +49,8 @@ export default function CartPage() {
                                 className={'p-3  items-center rounded-xl bg-white'}>
                                 <CartPriceSection></CartPriceSection>
                                 <button
-                                    className={'mt-3 py-3 w-full text-sm md:text-base rounded-lg text-white bg-linear-to-r from-red-800 to-red-500 shadow shadow-black/20'}>
+                                    onClick={changeRouteHandler}
+                                    className={'mt-3 py-3 w-full text-sm md:text-base rounded-lg text-white bg-linear-to-r from-red-800 to-red-500 shadow shadow-black/20 cursor-pointer'}>
                                     ادامه فرایند خرید
                                 </button>
                             </div>
@@ -53,7 +58,6 @@ export default function CartPage() {
                     </div>
                 )}
             </div>
-            <ScrollToBottomButton className={''}></ScrollToBottomButton>
         </div>
     )
 }

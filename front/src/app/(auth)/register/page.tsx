@@ -4,7 +4,7 @@ import {useForm} from "react-hook-form";
 import React from "react";
 import {useAuthContext} from "@/Contexts/AuthContext";
 import Swal from "sweetalert2";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {LuLoaderCircle} from "react-icons/lu";
 import Regex from "@/Utilities/Regex";
 import {FiEye, FiEyeOff} from "react-icons/fi";
@@ -23,7 +23,9 @@ function Register() {
     })
     const router = useRouter();
     const {login} = useAuthContext();
-    const [showPassword, setShowPassword] = React.useState(false);
+    const searchParams = useSearchParams();
+    const redirectParam=searchParams.get("redirect");
+    const redirect = redirectParam && redirectParam.startsWith("/") ? redirectParam : "/";    const [showPassword, setShowPassword] = React.useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
 
@@ -42,7 +44,7 @@ function Register() {
             login(data.user);
             await Swal.fire({text: 'ثبت نام با موفقیت انجام شد', timer: 1000});
             reset();
-            router.back();
+            router.replace(redirect);
         } catch (error) {
             await Swal.fire({text: 'خطا در ثبت نام', icon: 'error', timer: 1000});
 

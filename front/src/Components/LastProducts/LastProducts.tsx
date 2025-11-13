@@ -11,7 +11,7 @@ import { Navigation, Pagination } from "swiper/modules";
 function LastProducts() {
     const [products,setProducts] = React.useState<IProduct[]>([]);
     useEffect(()=>{
-           fetch("http://localhost:4000/api/product/all").then(res=>res.json()).then(d=>setProducts(d.products));
+           fetch("http://localhost:4000/api/product/last").then(res=>res.json()).then(d=>setProducts(d));
     },[])
 
 
@@ -22,11 +22,12 @@ function LastProducts() {
                 آخرین محصول ها
             </h3>
             <Swiper
+
                 modules={[Navigation, Pagination]}
                 spaceBetween={10}
                 slidesPerView={2}
-                navigation={{ enabled: false }}
-                loop={true}
+                navigation={{ enabled: true }}
+                // loop={true}
                 pagination={{ clickable: true }}
                 className="w-full"
                 breakpoints={

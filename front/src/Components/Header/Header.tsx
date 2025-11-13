@@ -72,7 +72,7 @@ const Header =memo( function () {
                         {/* left-header */}
                         <div className={'flex items-center justify-between'}>
                             {/*cart icon*/}
-                            <Link href={'/cart'} className={'group cursor-pointer  transition-all relative'}>
+                            <Link href={'/order/cart'} className={'group cursor-pointer  transition-all relative'}>
                                 <BsCart4 className={'text-2xl group-hover:hover:text-red-500'}/>
                                 {
                                     cartLength()>0 &&(
@@ -106,7 +106,7 @@ const Header =memo( function () {
                         <h1 className="font-titr-zebr text-2xl text-red-700">Fabric</h1>
                     </div>
                     {/*cart icon*/}
-                    <Link href={'/cart'} className={'relative'}>
+                    <Link href={'/order/cart'} className={'relative'}>
                         <BsCart4 className={'text-2xl accent-zinc-800 '}/>
                         {
                             cartLength()>0 && (
