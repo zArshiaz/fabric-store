@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+
+button{
+  @apply cursor-pointer;
+}
+
+@font-face {
+  font-family: 'Dorna Regular';
+  src: url('/fonts/dorna/Dorna Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Dorna Light';
+  src: url('/fonts/dorna/Dorna Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Dorna Bold';
+  src: url('/fonts/dorna/Dorna Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Kamva';
+  src: url('/fonts/kamva/kamva.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'TitrZebr';
+  src: url('/fonts/titr-zebr/TitrZebr.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Hamishe';
+  src: url('/fonts/hamishe/Digi Hamishe Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Hamishe Bold';
+  src: url('/fonts/hamishe/Digi Hamishe Bold.ttf') format('truetype');
+}
+
+
+
+@theme{
+
+
+  --font-dorna: 'Dorna Regular';
+  --font-dorna-bold: 'Dorna Bold';
+  --font-hamishe: 'Hamishe';
+  --font-dorna-light: 'Dorna Light';
+  --font-hamishe-bold: 'Hamishe Bold';
+  --font-kamva: 'Kamva';
+  --font-titr-zebr: 'TitrZebr';
+
+
+  --color-my_blue:#00ACC1;
+
+
+  --shadow-myShadow: 0 0 30px 5px gray;
+}
+
+.container{
+@apply mx-auto  xl:max-w-screen-xl px-3 sm:px-0 ;
+
+}
+body{
+  @apply bg-rose-50;
+  background-size:100%;
+
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* کل اسکرول‌بار */
+::-webkit-scrollbar {
+  width: 10px;              /* ضخامت اسکرول‌بار */
+  height: 12px;             /* برای اسکرول افقی */
+}
+
+/* زمینه اسکرول‌بار */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;       /* رنگ پس‌زمینه */
+  border-radius: 10px;       /* گرد کردن گوشه‌ها */
+}
+
+/* دسته (thumb) اسکرول‌بار */
+::-webkit-scrollbar-thumb {
+  background: #888;          /* رنگ دسته */
+  border-radius: 10px;       /* گرد کردن دسته */
+}
+
+/* حالت hover روی دسته */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;          /* تغییر رنگ هنگام هاور */
+}

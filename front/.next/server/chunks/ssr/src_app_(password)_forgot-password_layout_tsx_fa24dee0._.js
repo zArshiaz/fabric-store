@@ -1,0 +1,3 @@
+module.exports=[82275,a=>{"use strict";a.s(["default",()=>c]);var b=a.i(7997);let c=function({children:a}){return(0,b.jsx)("div",{className:"flex h-screen w-screen items-center justify-center",children:(0,b.jsxs)("div",{className:" bg-white rounded-2xl shadow-2xl overflow-hidden w-[380px]",children:[(0,b.jsx)("div",{className:"bg-red-700 text-white p-5 text-center",children:(0,b.jsx)("h1",{className:"text-2xl font-bold mb-2",children:"بازیابی رمز عبور"})}),(0,b.jsx)("div",{className:"p-4",children:a})]})})}}];
+
+//# sourceMappingURL=src_app_%28password%29_forgot-password_layout_tsx_fa24dee0._.js.map

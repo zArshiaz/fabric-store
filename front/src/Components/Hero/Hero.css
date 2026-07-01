@@ -1,0 +1,28 @@
+/*.hero-section {*/
+/*    padding-top: 100px;*/
+/*    background-size: cover;*/
+/*    background: linear-gradient(to left,rgba(0,0,0,0.7),rgba(0,0,0,0)),url("/images/hero-bg.jpg") no-repeat center center ;*/
+/*}*/
+.hero-section {
+
+    background-size: contain;
+    background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),url("/images/hero-bg2.jpg") no-repeat center center ;
+}
+@media (width >=40rem) {
+    .hero-section {
+        background-size: cover;
+        background: linear-gradient(to left,rgba(0,0,0,0.8),rgba(0,0,0,0)),url("/images/hero-bg.jpg") no-repeat center center ;
+    }
+}
+/*.hero-section::before {*/
+/*    position: absolute;*/
+/*    content: '';*/
+/*    left: 50%;*/
+/*    z-index: 10;*/
+/*    width: 37px;*/
+/*    height: 37px;*/
+/*    border-radius: 50%;*/
+/*    background-color: inherit;*/
+/*    transform: translateX(-50%) translateY(64%);*/
+/*    bottom: 0;*/
+/*}*/
