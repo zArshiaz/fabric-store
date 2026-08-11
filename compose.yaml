@@ -1,0 +1,67 @@
+services:
+  backend:
+    build: ./back
+
+    restart: unless-stopped
+
+    volumes:
+      - ./back/src:/app/src
+
+    env_file:
+      - ./back/.env
+
+    ports:
+      - "4000:3000"
+    depends_on:
+      mongodb:
+          condition: service_healthy
+
+  frontend:
+    build: ./front
+
+    restart: unless-stopped
+
+    volumes:
+      - ./front/src:/app/src
+      - ./front/public:/app/public
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      WATCHPACK_POLLING: "true"
+      # CSR: browser on host talks to published backend port
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:4000/api
+      # SSR: Next server inside the container talks to backend over the compose network
+      API_BASE_URL: http://backend:3000/api
+
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo
+
+    restart: unless-stopped
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet --username \"$${MONGO_INITDB_ROOT_USERNAME}\" --password \"$${MONGO_INITDB_ROOT_PASSWORD}\" --authenticationDatabase admin --eval \"db.adminCommand('ping').ok\" || exit 1"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+volumes:
+  mongo-data:

@@ -61,8 +61,12 @@ Fabric Store is a full-stack e-commerce application for selling fabrics. The pro
 
 ```text
 .
-├── front/   # Next.js storefront and user flows
-└── back/    # Express REST API, MongoDB models, uploads, auth, orders
+├── compose.yaml   # Docker Compose: frontend, backend, MongoDB
+├── front/         # Next.js storefront and user flows
+│   ├── Dockerfile
+│   └── .env.example
+└── back/          # Express REST API, MongoDB models, uploads, auth, orders
+    └── Dockerfile
 ```
 
 ## 🌐 Frontend Routes
@@ -97,13 +101,15 @@ Fabric Store is a full-stack e-commerce application for selling fabrics. The pro
 
 ## ⚙️ Environment Variables
 
+### Backend
+
 Create a `.env` file inside the `back` directory:
 
 ```env
-PORT=4000
+PORT=3000
 RUN_MODE=local
 
-MONGODB_URI=<your_mongodb_connection_string>
+MONGODB_URI=mongodb://admin:123456@mongodb:27017/mydb?authSource=admin
 
 JWT_SECRET=<your_jwt_secret>
 JWT_EXPIRES_IN=7
@@ -113,17 +119,36 @@ CLIENT_ORIGINS=http://localhost:3000,http://localhost:4200
 PAYMENT_TOKEN=<your_payment_provider_token>
 ```
 
-### Required Variables
+| Variable       | Description                                      |
+| -------------- | ------------------------------------------------ |
+| PORT           | Port inside the backend container (default 3000) |
+| RUN_MODE       | `local` or `host`                                |
+| MONGODB_URI    | MongoDB connection string                        |
+| JWT_SECRET     | JWT signing secret                               |
+| JWT_EXPIRES_IN | Expiration in **days** as a number (e.g. `7`)    |
+| CLIENT_ORIGINS | Allowed frontend origins                         |
+| PAYMENT_TOKEN  | Payment gateway token                            |
 
-| Variable       | Description               |
-| -------------- | ------------------------- |
-| PORT           | Backend server port       |
-| RUN_MODE       | local or host             |
-| MONGODB_URI    | MongoDB connection string |
-| JWT_SECRET     | JWT signing secret        |
-| JWT_EXPIRES_IN | JWT expiration time       |
-| CLIENT_ORIGINS | Allowed frontend origins  |
-| PAYMENT_TOKEN  | Payment gateway token     |
+> With Docker Compose, the backend is published on the host as **`localhost:4000`** (`4000:3000`).
+
+### Frontend
+
+Copy `front/.env.example` to `front/.env` for local (non-Docker) runs:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
+API_BASE_URL=http://localhost:4000/api
+```
+
+| Variable                   | Used in | Description |
+| -------------------------- | ------- | ----------- |
+| `NEXT_PUBLIC_API_BASE_URL` | CSR (browser) | API base URL reachable from the host browser |
+| `API_BASE_URL`             | SSR (Next server) | API base URL for server-side requests |
+
+In Docker Compose these are set automatically:
+
+* CSR → `http://localhost:4000/api`
+* SSR → `http://backend:3000/api` (Compose service name)
 
 ## 🚀 Installation
 
@@ -141,16 +166,36 @@ cd back
 npm install
 ```
 
-## ▶️ Run Locally
+## 🐳 Run with Docker Compose
 
-Start backend:
+From the project root (requires `back/.env`):
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+| Service    | Host URL                  |
+| ---------- | ------------------------- |
+| Frontend   | http://localhost:3000     |
+| Backend    | http://localhost:4000     |
+| MongoDB    | localhost:27017           |
+
+Stop:
+
+```bash
+docker compose down
+```
+
+## ▶️ Run Locally (without Docker)
+
+Start MongoDB yourself, then:
 
 ```bash
 cd back
 npm run dev
 ```
-
-Start frontend:
 
 ```bash
 cd front
